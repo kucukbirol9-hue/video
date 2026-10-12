@@ -1,0 +1,23 @@
+name: Manim Render
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Sistem bağımlılıklarını kur
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libcairo2-dev libpango1.0-dev pkg-config
+      - name: Manim'i kur
+        run: pip install manim
+      - name: Videoyu render et
+        run: manim -qh uzay_buyuklukleri.py UzayBuyuklukleri
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video
+          path: media/videos/**/*.mp4
